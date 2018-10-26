@@ -1,0 +1,4 @@
+*_test.tf
+cert_test.*
+.terraform/
+terraform.tfstate*
