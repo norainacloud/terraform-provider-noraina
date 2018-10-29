@@ -1,19 +1,7 @@
 {
 	"comment": "",
-	"ignore": "test",
+	"ignore": "appengine test",
 	"package": [
-		{
-			"path": "appengine",
-			"revision": ""
-		},
-		{
-			"path": "appengine_internal",
-			"revision": ""
-		},
-		{
-			"path": "appengine_internal/base",
-			"revision": ""
-		},
 		{
 			"checksumSHA1": "j/0+O4eJ99Jrb9un/bwi5npLyOM=",
 			"path": "cloud.google.com/go/compute/metadata",
@@ -61,10 +49,6 @@
 			"path": "contrib.go.opencensus.io/exporter/ocagent",
 			"revision": "b8ece14a43f0cda76036504e4a4fd7fa27ce1869",
 			"revisionTime": "2018-10-24T04:13:55Z"
-		},
-		{
-			"path": "github.com/Azure/azure-sdk-for-go/arm/storage",
-			"revision": ""
 		},
 		{
 			"checksumSHA1": "Fo0yAWjaIGDb4GNhqnLCgyaPzNI=",
@@ -1131,23 +1115,11 @@
 			"revisionTime": "2018-10-26T09:40:58Z"
 		},
 		{
-			"checksumSHA1": "4R7X2wRYYOxdXsoXOEcyBoCakb8=",
-			"path": "github.com/gogo/protobuf/protoc-gen-gogo/descriptor",
-			"revision": "e87afe3c25daf6fa321fed3705938e53672b0a3b",
-			"revisionTime": "2018-10-26T09:40:58Z"
-		},
-		{
-			"checksumSHA1": "q3Bc7JpLWBqhZ4M7oreGo34RSkc=",
+			"checksumSHA1": "GaJLoEuMGnP5ofXvuweAI4wx06U=",
 			"origin": "github.com/hashicorp/terraform/vendor/github.com/golang/protobuf/proto",
 			"path": "github.com/golang/protobuf/proto",
-			"revision": "cf8516287e8d4a18f28902cbad49e09c66e97de7",
-			"revisionTime": "2018-08-24T22:08:54Z"
-		},
-		{
-			"checksumSHA1": "fXNL9CT3MIlkdLUCn83Aon7QVAU=",
-			"path": "github.com/golang/protobuf/protoc-gen-go/descriptor",
-			"revision": "d3de96c4c28ef8af3aa1a892fc481e0f103c01ff",
-			"revisionTime": "2018-10-25T22:50:59Z"
+			"revision": "0382e7636b97e3f60fb188fef87a8d2c42c51ba9",
+			"revisionTime": "2018-10-29T16:52:05Z"
 		},
 		{
 			"checksumSHA1": "5UJZd7Zyo40vk1OjMTy6LWjTcss=",
@@ -1176,11 +1148,6 @@
 			"path": "github.com/golang/protobuf/ptypes/timestamp",
 			"revision": "cf8516287e8d4a18f28902cbad49e09c66e97de7",
 			"revisionTime": "2018-08-24T22:08:54Z"
-		},
-		{
-			"origin": "github.com/hashicorp/terraform/vendor/github.com/golang/protobuf/ptypes/wrappers",
-			"path": "github.com/golang/protobuf/ptypes/wrappers",
-			"revision": "cf8516287e8d4a18f28902cbad49e09c66e97de7"
 		},
 		{
 			"checksumSHA1": "h1d2lPZf6j2dW/mIqVnd1RdykDo=",
@@ -1813,9 +1780,11 @@
 			"revisionTime": "2018-08-24T22:08:54Z"
 		},
 		{
+			"checksumSHA1": "DaQmLi48oUAwctWcX6A6DNN61UY=",
 			"origin": "github.com/hashicorp/terraform/vendor/github.com/hashicorp/hcl/hcl/fmtcmd",
 			"path": "github.com/hashicorp/hcl/hcl/fmtcmd",
-			"revision": "cf8516287e8d4a18f28902cbad49e09c66e97de7"
+			"revision": "cf8516287e8d4a18f28902cbad49e09c66e97de7",
+			"revisionTime": "2018-08-24T22:08:54Z"
 		},
 		{
 			"checksumSHA1": "teokXoyRXEJ0vZHOWBD11l5YFNI=",
