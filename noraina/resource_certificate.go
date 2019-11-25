@@ -3,7 +3,7 @@ package noraina
 import (
 	"crypto/md5"
 	"encoding/hex"
-	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/norainacloud/terraform-provider-noraina/go-sdk"
 	"io"
 	"os"

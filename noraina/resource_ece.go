@@ -3,8 +3,7 @@ package noraina
 import (
 	"errors"
 	"fmt"
-	"github.com/hashicorp/terraform/helper/schema"
-
+	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/norainacloud/terraform-provider-noraina/go-sdk"
 )
 
