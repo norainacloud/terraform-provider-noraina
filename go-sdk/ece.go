@@ -3,7 +3,6 @@ package go_sdk
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -94,7 +93,7 @@ func (c *NorainaApiClient) CreateInstance(ireq InstanceRequest) (*InstanceRespon
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		return nil, errors.New(fmt.Sprintf("[ERROR] Create Instance Error with Status code %v", resp.StatusCode))
+		return nil, fmt.Errorf("[ERROR] Create Instance Error with Status code %v", resp.StatusCode)
 	}
 
 	log.Printf("[DEBUG] CREATE -> response Status : %s", resp.Status)
@@ -134,7 +133,7 @@ func (c *NorainaApiClient) UpdateInstance(id string, ireq InstanceRequest) (*Ins
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		return nil, errors.New(fmt.Sprintf("[ERROR] Update Instance Error with Status code %v", resp.StatusCode))
+		return nil, fmt.Errorf("[ERROR] Update Instance Error with Status code %v", resp.StatusCode)
 	}
 
 	log.Printf("[DEBUG] CREATE -> response Status : %s", resp.Status)

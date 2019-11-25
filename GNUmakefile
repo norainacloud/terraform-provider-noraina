@@ -1,4 +1,5 @@
-TEST?=./...
+TEST?=$$(go list ./... |grep -v 'vendor')
+GOFMT_FILES?=$$(find . -name '*.go' |grep -v vendor)
 
 default: build
 
@@ -8,19 +9,20 @@ build: fmtcheck
 test: fmtcheck
 	go test $(TEST) -timeout=30s -parallel=4
 
+fmt:
+	@echo "==> Fixing source code with gofmt..."
+	gofmt -w -s $(GOFMT_FILES)
+
 fmtcheck:
 	@sh -c "'$(CURDIR)/scripts/gofmtcheck.sh'"
 
 lint:
 	@echo "==> Checking source code against linters..."
-	@gometalinter ./$(PKG_NAME)
+	golangci-lint run ./...
 
 tools:
-	go get -u github.com/kardianos/govendor
-	go get -u github.com/alecthomas/gometalinter
-	gometalinter --install
+	@echo "==> Installing required tooling..."
+	@GO111MODULE=on go install github.com/golangci/golangci-lint/cmd/golangci-lint
+	@GO111MODULE=on go install github.com/bflad/tfproviderlint/cmd/tfproviderlint
 
-vendor-status:
-	@govendor status
-
-.PHONY: build test fmtcheck lint tools vendor-status
+.PHONY: build test fmt fmtcheck lint tools

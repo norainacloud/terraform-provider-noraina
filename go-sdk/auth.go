@@ -3,7 +3,6 @@ package go_sdk
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 )
@@ -29,7 +28,10 @@ func (c *NorainaApiClient) GetAuthToken(email string, password string) (string, 
 		Password: password,
 	}
 	b := new(bytes.Buffer)
-	json.NewEncoder(b).Encode(authRequest)
+	err := json.NewEncoder(b).Encode(authRequest)
+	if err != nil {
+		return "", err
+	}
 
 	resp, err := http.Post(norainaDomain+loginRoute, "application/json", b)
 	if err != nil {
@@ -44,11 +46,11 @@ func (c *NorainaApiClient) GetAuthToken(email string, password string) (string, 
 	}
 
 	if resp.StatusCode != 200 {
-		return "", errors.New(fmt.Sprintf("[ERROR] Auth Error with Status code %v, message %v", resp.StatusCode, authResponse.Data.Message))
+		return "", fmt.Errorf("[ERROR] Auth Error with Status code %v, message %v", resp.StatusCode, authResponse.Data.Message)
 	}
 
 	if authResponse.Status != "success" {
-		return "", errors.New(fmt.Sprintf("[ERROR] Auth returns HTTP Status 200 but no token could be retrieved, status is %v, messsage %v", authResponse.Status, authResponse.Data.Message))
+		return "", fmt.Errorf("[ERROR] Auth returns HTTP Status 200 but no token could be retrieved, status is %v, messsage %v", authResponse.Status, authResponse.Data.Message)
 	}
 
 	return authResponse.Data.Token, nil

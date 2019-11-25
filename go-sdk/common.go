@@ -1,7 +1,6 @@
 package go_sdk
 
 import (
-	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -23,7 +22,7 @@ func (c *NorainaApiClient) getResource(id string, resourceRoute string) (io.Read
 	}
 
 	if resp.StatusCode != 200 {
-		return nil, errors.New(fmt.Sprintf("[ERROR] Get %v/%v with Status code %v", resourceRoute, id, resp.StatusCode))
+		return nil, fmt.Errorf("[ERROR] Get %v/%v with Status code %v", resourceRoute, id, resp.StatusCode)
 	}
 
 	log.Printf("[DEBUG] Get %v/%v -> response Status : %s", resourceRoute, id, resp.Status)

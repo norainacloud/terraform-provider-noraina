@@ -3,7 +3,6 @@ package go_sdk
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"mime/multipart"
@@ -85,7 +84,7 @@ func (c *NorainaApiClient) CreateCertificate(iCert CertificateCreateRequest) (*C
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		return nil, errors.New(fmt.Sprintf("[ERROR] Create Certificate Error with Status code %v", resp.StatusCode))
+		return nil, fmt.Errorf("[ERROR] Create Certificate Error with Status code %v", resp.StatusCode)
 	}
 
 	certificateResponse := &CertificateCreateResponse{}

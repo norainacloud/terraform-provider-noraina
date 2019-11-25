@@ -1,10 +1,10 @@
-dist: trusty
+dist: xenial
 sudo: required
 services:
   - docker
 language: go
 go:
-  - "1.11.1"
+  - "1.13"
 
 install:
 # This script is used by the Travis build to install a cookie for
@@ -17,12 +17,7 @@ install:
 script:
 - make lint
 - make test
-- make vendor-status
 
 branches:
   only:
   - master
-matrix:
-  fast_finish: true
-  allow_failures:
-  - go: tip
