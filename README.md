@@ -6,7 +6,7 @@ Terraform Provider
 Requirements
 ------------
 
-- [Terraform](https://www.terraform.io/downloads.html) 0.12+
+- [Terraform](https://www.terraform.io/downloads.html) `>=0.12.7` (as this project is using [the standalone SDK](https://www.terraform.io/docs/extend/plugin-sdk.html))
 - [Go](https://golang.org/doc/install) 1.13 (to build the provider plugin)
 
 Building The Provider
