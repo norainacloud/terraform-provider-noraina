@@ -1,14 +1,18 @@
-package go_sdk
+package noraina
 
 import (
 	"bytes"
-	"encoding/json"
+	"context"
 	"fmt"
 	"io"
 	"mime/multipart"
 	"net/http"
 	"os"
 	"path/filepath"
+)
+
+const (
+	certificateRoute = "api/certificate"
 )
 
 type CertificateCreateRequest struct {
@@ -38,7 +42,7 @@ type CertificateGetResponseData struct {
 	CreatedDate string `json:"created_date"`
 }
 
-func (c *NorainaApiClient) CreateCertificate(iCert CertificateCreateRequest) (*CertificateCreateResponse, error) {
+func (c *Client) CreateCertificate(ctx context.Context, iCert CertificateCreateRequest) (*CertificateCreateResponse, error) {
 	body := &bytes.Buffer{}
 	w := multipart.NewWriter(body)
 
@@ -69,7 +73,7 @@ func (c *NorainaApiClient) CreateCertificate(iCert CertificateCreateRequest) (*C
 		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", norainaDomain+certificateRoute, body)
+	req, err := http.NewRequest(http.MethodPost, defaultBaseURL+certificateRoute, body)
 	if err != nil {
 		return nil, err
 	}
@@ -77,18 +81,8 @@ func (c *NorainaApiClient) CreateCertificate(iCert CertificateCreateRequest) (*C
 	req.Header.Add("x-access-token", c.Token)
 	req.Header.Set("Content-Type", w.FormDataContentType())
 
-	resp, err := c.Client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != 200 {
-		return nil, fmt.Errorf("[ERROR] Create Certificate Error with Status code %v", resp.StatusCode)
-	}
-
-	certificateResponse := &CertificateCreateResponse{}
-	err = json.NewDecoder(resp.Body).Decode(certificateResponse)
+	certificateResponse := new(CertificateCreateResponse)
+	err = c.Do(ctx, req, certificateResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -96,16 +90,15 @@ func (c *NorainaApiClient) CreateCertificate(iCert CertificateCreateRequest) (*C
 	return certificateResponse, nil
 }
 
-func (c *NorainaApiClient) GetCertificate(id string) (*CertificateGetResponse, error) {
-	body, err := c.getResource(id, certificateRoute)
+func (c *Client) GetCertificate(ctx context.Context, id string) (*CertificateGetResponse, error) {
+	path := fmt.Sprintf("%s/%s", certificateRoute, id)
+	req, err := c.NewRequest(ctx, http.MethodGet, path, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	defer body.Close()
-
-	certificateResponse := &CertificateGetResponse{}
-	err = json.NewDecoder(body).Decode(certificateResponse)
+	certificateResponse := new(CertificateGetResponse)
+	err = c.Do(ctx, req, certificateResponse)
 	if err != nil {
 		return nil, err
 	}
@@ -113,8 +106,8 @@ func (c *NorainaApiClient) GetCertificate(id string) (*CertificateGetResponse, e
 	return certificateResponse, nil
 }
 
-func (c *NorainaApiClient) DeleteCertificate(id string) error {
-	return c.deleteResource(id, certificateRoute)
+func (c *Client) DeleteCertificate(ctx context.Context, id string) error {
+	return c.deleteResource(ctx, id, certificateRoute)
 }
 
 func appendFileToWriter(name string, path string, w *multipart.Writer) error {

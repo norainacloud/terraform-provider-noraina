@@ -1,9 +1,10 @@
 package noraina
 
 import (
+	"context"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
-	"github.com/norainacloud/terraform-provider-noraina/go-sdk"
+	n "github.com/norainacloud/go-client-noraina"
 )
 
 func Provider() terraform.ResourceProvider {
@@ -40,8 +41,16 @@ func init() {
 }
 
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {
-	return go_sdk.NewNorainaApiClient(
-		d.Get("email").(string),
-		d.Get("password").(string),
-	)
+	c := n.NewClient(nil)
+
+	err := c.GetAuthToken(context.Background(), &n.AuthRequest{
+		Email:    d.Get("email").(string),
+		Password: d.Get("password").(string),
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return c, nil
 }

@@ -1,10 +1,11 @@
 package noraina
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/norainacloud/terraform-provider-noraina/go-sdk"
+	n "github.com/norainacloud/go-client-noraina"
 )
 
 func resourceEce() *schema.Resource {
@@ -163,22 +164,22 @@ func resourceEce() *schema.Resource {
 }
 
 func resourceEceCreate(d *schema.ResourceData, meta interface{}) error {
-	c := meta.(*go_sdk.NorainaApiClient)
+	c := meta.(*n.Client)
 
 	services := d.Get("service").([]interface{})
 	if len(services) == 0 {
 		return errors.New("[ERROR] you must define at least 1 service in the instance")
 	}
 
-	ireq := go_sdk.InstanceRequest{
+	ireq := n.InstanceRequest{
 		Name:     d.Get("name").(string),
-		Services: make([]go_sdk.InstanceServiceRequest, 0),
+		Services: make([]n.InstanceServiceRequest, 0),
 	}
 
 	for _, service := range services {
 		s := service.(map[string]interface{})
 
-		isr := go_sdk.InstanceServiceRequest{
+		isr := n.InstanceServiceRequest{
 			Name:             s["name"].(string),
 			Fqdn:             s["fqdn"].(string),
 			OriginHostHeader: s["origin_hostheader"].(string),
@@ -194,7 +195,7 @@ func resourceEceCreate(d *schema.ResourceData, meta interface{}) error {
 		ireq.Services = append(ireq.Services, isr)
 	}
 
-	res, err := c.CreateInstance(ireq)
+	res, err := c.CreateInstance(context.Background(), ireq)
 	if err != nil {
 		return err
 	}
@@ -205,8 +206,8 @@ func resourceEceCreate(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceEceRead(d *schema.ResourceData, meta interface{}) error {
-	c := meta.(*go_sdk.NorainaApiClient)
-	res, err := c.GetInstance(d.Id())
+	c := meta.(*n.Client)
+	res, err := c.GetInstance(context.Background(), d.Id())
 	if err != nil {
 		d.SetId("")
 		return err
@@ -229,22 +230,22 @@ func resourceEceRead(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceEceUpdate(d *schema.ResourceData, meta interface{}) error {
-	c := meta.(*go_sdk.NorainaApiClient)
+	c := meta.(*n.Client)
 
 	services := d.Get("service").([]interface{})
 	if len(services) == 0 {
 		return errors.New("[ERROR] you must define at least 1 service in the instance")
 	}
 
-	ireq := go_sdk.InstanceRequest{
+	ireq := n.InstanceRequest{
 		Name:     d.Get("name").(string),
-		Services: make([]go_sdk.InstanceServiceRequest, 0),
+		Services: make([]n.InstanceServiceRequest, 0),
 	}
 
 	for _, service := range services {
 		s := service.(map[string]interface{})
 
-		isr := go_sdk.InstanceServiceRequest{
+		isr := n.InstanceServiceRequest{
 			Name:             s["name"].(string),
 			Fqdn:             s["fqdn"].(string),
 			OriginHostHeader: s["origin_hostheader"].(string),
@@ -260,7 +261,7 @@ func resourceEceUpdate(d *schema.ResourceData, meta interface{}) error {
 		ireq.Services = append(ireq.Services, isr)
 	}
 
-	_, err := c.UpdateInstance(d.Id(), ireq)
+	_, err := c.UpdateInstance(context.Background(), d.Id(), ireq)
 	if err != nil {
 		d.SetId("")
 		return err
@@ -270,10 +271,10 @@ func resourceEceUpdate(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceEceDelete(d *schema.ResourceData, meta interface{}) error {
-	return meta.(*go_sdk.NorainaApiClient).DeleteInstance(d.Id())
+	return meta.(*n.Client).DeleteInstance(context.Background(), d.Id())
 }
 
-func flattenServices(sf []go_sdk.ServiceFields) []map[string]interface{} {
+func flattenServices(sf []n.ServiceFields) []map[string]interface{} {
 	services := make([]map[string]interface{}, 0, len(sf))
 
 	for _, so := range sf {
@@ -294,7 +295,7 @@ func flattenServices(sf []go_sdk.ServiceFields) []map[string]interface{} {
 	return services
 }
 
-func flattenServers(sf []go_sdk.ServerFields) []map[string]interface{} {
+func flattenServers(sf []n.ServerFields) []map[string]interface{} {
 	servers := make([]map[string]interface{}, 0, len(sf))
 
 	for _, so := range sf {

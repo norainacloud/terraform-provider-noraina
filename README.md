@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/norainacloud/terraform-provider-noraina.svg?branch=master)](https://travis-ci.org/norainacloud/terraform-provider-noraina)
+[![Build Status](https://travis-ci.com/norainacloud/terraform-provider-noraina.svg?branch=master)](https://travis-ci.com/norainacloud/terraform-provider-noraina)
 
 Terraform Provider
 ==================

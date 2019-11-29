@@ -1,10 +1,11 @@
 package noraina
 
 import (
+	"context"
 	"crypto/md5"
 	"encoding/hex"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/norainacloud/terraform-provider-noraina/go-sdk"
+	n "github.com/norainacloud/go-client-noraina"
 	"io"
 	"os"
 )
@@ -53,9 +54,9 @@ func resourceCertificate() *schema.Resource {
 }
 
 func resourceCertificateCreate(d *schema.ResourceData, meta interface{}) error {
-	c := meta.(*go_sdk.NorainaApiClient)
+	c := meta.(*n.Client)
 
-	iCert := go_sdk.CertificateCreateRequest{
+	iCert := n.CertificateCreateRequest{
 		Name: d.Get("name").(string),
 		Cert: d.Get("cert").(string),
 		Key:  d.Get("key").(string),
@@ -65,7 +66,7 @@ func resourceCertificateCreate(d *schema.ResourceData, meta interface{}) error {
 		iCert.Chain = chain
 	}
 
-	res, err := c.CreateCertificate(iCert)
+	res, err := c.CreateCertificate(context.Background(), iCert)
 	if err != nil {
 		return err
 	}
@@ -76,9 +77,9 @@ func resourceCertificateCreate(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceCertificateRead(d *schema.ResourceData, meta interface{}) error {
-	c := meta.(*go_sdk.NorainaApiClient)
+	c := meta.(*n.Client)
 
-	res, err := c.GetCertificate(d.Id())
+	res, err := c.GetCertificate(context.Background(), d.Id())
 	if err != nil {
 		d.SetId("")
 		return err
@@ -91,7 +92,7 @@ func resourceCertificateRead(d *schema.ResourceData, meta interface{}) error {
 }
 
 func resourceCertificateDelete(d *schema.ResourceData, meta interface{}) error {
-	return meta.(*go_sdk.NorainaApiClient).DeleteCertificate(d.Id())
+	return meta.(*n.Client).DeleteCertificate(context.Background(), d.Id())
 }
 
 func hashCertPart(cert interface{}) string {

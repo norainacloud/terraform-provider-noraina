@@ -163,6 +163,8 @@ github.com/mitchellh/go-wordwrap
 github.com/mitchellh/mapstructure
 # github.com/mitchellh/reflectwalk v1.0.1
 github.com/mitchellh/reflectwalk
+# github.com/norainacloud/go-client-noraina v0.0.0-20191129165446-02149b8db50f
+github.com/norainacloud/go-client-noraina
 # github.com/oklog/run v1.0.0
 github.com/oklog/run
 # github.com/posener/complete v1.2.1
